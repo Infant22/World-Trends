@@ -36,7 +36,6 @@ export interface DiskCachePayload {
 }
 
 const VALID_LANGUAGES: NewsLanguage[] = ['english', 'tamil', 'malayalam', 'telugu'];
-const STALE_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes
 
 const NEWSDATA_LANG_CODES: Record<NewsLanguage, string> = {
   english: 'en',
@@ -52,6 +51,66 @@ const NEWSDATA_CATEGORY_MAP: Record<NewsCategoryKey, string | null> = {
   sports: 'sports',
   finance: 'business',
 };
+
+// Generic Script / Language Regex Patterns
+const REGEX_JAPANESE_CJK = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\u3400-\u4DBF]/;
+const REGEX_KOREAN = /[\uAC00-\uD7AF\u1100-\u11FF]/;
+const REGEX_ARABIC = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
+const REGEX_CYRILLIC = /[\u0400-\u04FF]/;
+const REGEX_THAI = /[\u0E00-\u0E7F]/;
+const REGEX_DEVANAGARI = /[\u0900-\u097F]/;
+
+const REGEX_TAMIL = /[\u0B80-\u0BFF]/;
+const REGEX_MALAYALAM = /[\u0D00-\u0D7F]/;
+const REGEX_TELUGU = /[\u0C00-\u0C7F]/;
+
+export function isArticleMatchingLanguage(title?: string, description?: string, language: NewsLanguage = 'english'): boolean {
+  const text = `${title || ''} ${description || ''}`.trim();
+  if (!text) return false;
+
+  const hasCjkOrForeignScript =
+    REGEX_JAPANESE_CJK.test(text) ||
+    REGEX_KOREAN.test(text) ||
+    REGEX_ARABIC.test(text) ||
+    REGEX_CYRILLIC.test(text) ||
+    REGEX_THAI.test(text);
+
+  if (hasCjkOrForeignScript) return false;
+
+  switch (language) {
+    case 'english': {
+      if (
+        REGEX_TAMIL.test(text) ||
+        REGEX_MALAYALAM.test(text) ||
+        REGEX_TELUGU.test(text) ||
+        REGEX_DEVANAGARI.test(text)
+      ) {
+        return false;
+      }
+      return /[a-zA-Z]/.test(text);
+    }
+    case 'tamil': {
+      if (REGEX_MALAYALAM.test(text) || REGEX_TELUGU.test(text) || REGEX_DEVANAGARI.test(text)) {
+        return false;
+      }
+      return REGEX_TAMIL.test(text);
+    }
+    case 'malayalam': {
+      if (REGEX_TAMIL.test(text) || REGEX_TELUGU.test(text) || REGEX_DEVANAGARI.test(text)) {
+        return false;
+      }
+      return REGEX_MALAYALAM.test(text);
+    }
+    case 'telugu': {
+      if (REGEX_TAMIL.test(text) || REGEX_MALAYALAM.test(text) || REGEX_DEVANAGARI.test(text)) {
+        return false;
+      }
+      return REGEX_TELUGU.test(text);
+    }
+    default:
+      return true;
+  }
+}
 
 export function getNewsDataLanguageCode(language: NewsLanguage): string {
   return NEWSDATA_LANG_CODES[language] || 'en';
@@ -110,8 +169,13 @@ function loadDiskCachePayload(language: NewsLanguage, category: NewsCategoryKey)
         loadedArticles = parsed;
       }
 
-      console.log(`[NewsData Cache] Loaded ${loadedArticles.length} ${language}_${category} articles from disk cache.`);
-      return { updatedAt, articles: loadedArticles };
+      // Filter loaded disk cache articles through generic language script validation
+      const validArticles = loadedArticles.filter((item) =>
+        isArticleMatchingLanguage(item.title, item.description, language)
+      );
+
+      console.log(`[NewsData Cache] Loaded ${validArticles.length} ${language}_${category} articles from disk cache.`);
+      return { updatedAt, articles: validArticles };
     }
   } catch (err) {
     console.warn(`[NewsData Cache] Could not load disk cache for ${language}_${category}:`, err);
@@ -166,6 +230,13 @@ function normalizeAndDeduplicateArticles(rawArticles: NewsDataArticle[], targetL
     const rawUrl = (raw.link || '').trim();
     if (!titleText || !rawUrl) continue;
 
+    const descText = (raw.description || titleText).trim();
+
+    // Validate article language script before adding
+    if (!isArticleMatchingLanguage(titleText, descText, targetLang)) {
+      continue;
+    }
+
     const cleanUrl = rawUrl.split('?')[0].toLowerCase();
     if (seenUrls.has(cleanUrl)) continue;
 
@@ -201,13 +272,13 @@ function normalizeAndDeduplicateArticles(rawArticles: NewsDataArticle[], targetL
     normalized.push({
       id: `newsdata_${targetLang}_${targetCategory}_${i}_${Buffer.from(cleanUrl).toString('base64').substring(0, 10)}`,
       title: titleText,
-      description: (raw.description || titleText).trim(),
+      description: descText,
       source,
       url: rawUrl,
       imageUrl,
       publishedAt,
       category: cat,
-      language: raw.language || targetLang,
+      language: targetLang,
     });
   }
 
@@ -243,16 +314,12 @@ async function fetchFromNewsDataApi(language: NewsLanguage, category: NewsCatego
     const status = response.status;
     const results = response.data && Array.isArray(response.data.results) ? response.data.results : [];
     const resultCount = results.length;
-    const firstArticleCategory = results.length > 0
-      ? (Array.isArray(results[0].category) ? results[0].category.join(',') : String(results[0].category || 'none'))
-      : 'none';
-    const firstArticleTitle = results.length > 0 ? String(results[0].title || 'none') : 'none';
 
     const safeParams = new URLSearchParams(params);
     safeParams.set('apikey', 'REDACTED');
 
     console.log(
-      `[NewsData Debug]\nlanguage=${language}\nuiCategory=${category}\nendpoint=${endpoint}\nrequestParams=${safeParams.toString()}\nstatus=${status}\nresultCount=${resultCount}\nfirstArticleCategory=${firstArticleCategory}\nfirstArticleTitle=${firstArticleTitle}`
+      `[NewsData Debug]\nlanguage=${language}\nuiCategory=${category}\nendpoint=${endpoint}\nrequestParams=${safeParams.toString()}\nstatus=${status}\nresultCount=${resultCount}`
     );
 
     const normalized = normalizeAndDeduplicateArticles(results, language, category);
@@ -315,6 +382,17 @@ export async function getNewsDataFeed(
 
   const payload = memoryPayloads[memKey];
 
+  // Filter payload articles through language matching to ensure no non-matching articles pass through
+  if (payload && payload.articles.length > 0) {
+    const validCachedArticles = payload.articles.filter((a) =>
+      isArticleMatchingLanguage(a.title, a.description, language)
+    );
+    if (validCachedArticles.length !== payload.articles.length) {
+      payload.articles = validCachedArticles;
+      saveDiskCache(language, category, payload);
+    }
+  }
+
   // 2. CACHE HIT: Return cached data if available and forceRefresh is false
   if (payload && payload.articles.length > 0 && !forceRefresh) {
     console.log(`[NewsData Credit]\nlanguage: ${language}\ncategory: ${category}\nAPI request made: NO\ncache hit: YES`);
@@ -332,7 +410,7 @@ export async function getNewsDataFeed(
     return articles;
   }
 
-  // Fallback to existing cache if API returns empty array on refresh
+  // Fallback to existing valid cache if API returns empty array on refresh
   if (payload && payload.articles.length > 0) {
     return payload.articles;
   }
