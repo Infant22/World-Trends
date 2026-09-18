@@ -1,0 +1,5 @@
+.env
+node_modules
+dist
+data_news_cache*.json
+data_newsdata_cache*.json

@@ -1,0 +1,29 @@
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Environment & Secret Files
+.env
+.env.local
+.env.*.local
+
+# Node Dependencies
+node_modules/
+
+# Production Build Outputs
+dist/
+dist-ssr/
+build/
+
+# Scratch & Dev Caches
+scratch/
+.gemini/
+data_news*cache*.json
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
