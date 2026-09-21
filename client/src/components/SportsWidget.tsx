@@ -121,10 +121,10 @@ export const SportsWidget: React.FC<SportsWidgetProps> = ({ matches, isLoading }
               key={match.id}
               className="py-2.5 px-2 rounded-xl hover:bg-slate-100/60 dark:hover:bg-slate-800/40 transition-colors"
             >
-              <div className="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5">
-                <span className="uppercase tracking-wider font-mono truncate min-w-0 pr-1">{match.league}</span>
+              <div className="flex items-start justify-between gap-1.5 text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5">
+                <span className="uppercase tracking-wider font-mono break-words whitespace-normal min-w-0 pr-1 leading-snug">{match.league}</span>
                 <span
-                  className={`px-2 py-0.5 rounded-full font-bold text-[9px] ${
+                  className={`px-2 py-0.5 rounded-full font-bold text-[9px] shrink-0 whitespace-nowrap ml-1 ${
                     match.status === 'LIVE'
                       ? 'bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-300/80 dark:border-rose-500/30'
                       : match.status === 'FINISHED'
@@ -137,13 +137,13 @@ export const SportsWidget: React.FC<SportsWidgetProps> = ({ matches, isLoading }
               </div>
 
               {/* Teams & Scores */}
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center">
-                <div className="text-left font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center gap-1.5 truncate">
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-1.5 sm:gap-2 text-center min-w-0">
+                <div className="text-left font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center gap-1.5 min-w-0">
                   <TeamLogo logo={match.homeLogo} teamName={match.homeTeam} sport={match.sport} />
                   <span className="truncate">{match.homeTeam}</span>
                 </div>
 
-                <div className="px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono font-bold text-xs text-rose-600 dark:text-rose-400 shadow-xs shrink-0">
+                <div className="px-2 sm:px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 font-mono font-bold text-xs text-rose-600 dark:text-rose-400 shadow-xs shrink-0 whitespace-nowrap">
                   {(() => {
                     const hasHome = match.homeScore !== undefined && match.homeScore !== null && String(match.homeScore).trim() !== '' && String(match.homeScore).toLowerCase() !== 'undefined';
                     const hasAway = match.awayScore !== undefined && match.awayScore !== null && String(match.awayScore).trim() !== '' && String(match.awayScore).toLowerCase() !== 'undefined';
@@ -155,7 +155,7 @@ export const SportsWidget: React.FC<SportsWidgetProps> = ({ matches, isLoading }
                   })()}
                 </div>
 
-                <div className="text-right font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center justify-end gap-1.5 truncate">
+                <div className="text-right font-bold text-xs text-slate-900 dark:text-slate-100 flex items-center justify-end gap-1.5 min-w-0">
                   <span className="truncate">{match.awayTeam}</span>
                   <TeamLogo logo={match.awayLogo} teamName={match.awayTeam} sport={match.sport} />
                 </div>

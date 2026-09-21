@@ -24,16 +24,16 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ data, isLoading })
   const aqiStatus = data.aqi?.status || 'Good';
 
   return (
-    <div className="glass-panel glass-panel-hover rounded-2xl p-5 md:p-6 relative overflow-hidden">
+    <div className="glass-panel glass-panel-hover rounded-2xl p-4 sm:p-5 md:p-6 relative overflow-hidden">
       {/* Top Header Row */}
-      <div className="flex items-center justify-between mb-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="flex items-center gap-2.5">
-          <span className="text-3xl leading-none">{data.icon}</span>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-slate-900 dark:text-white leading-none">{data.city}</h2>
+      <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-2.5 mb-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="text-3xl leading-none shrink-0">{data.icon}</span>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white leading-none truncate max-w-[130px] xs:max-w-none">{data.city}</h2>
               {/* AQI Badge */}
-              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-500/20 flex items-center gap-1">
+              <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-500/20 flex items-center gap-1 shrink-0">
                 <ShieldCheck className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                 <span>AQI {aqiIndex} • {aqiStatus}</span>
               </span>
@@ -43,7 +43,7 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ data, isLoading })
         </div>
 
         {/* Hourly / Daily Toggle Pills */}
-        <div className="flex bg-slate-100 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-800 text-xs">
+        <div className="flex bg-slate-100 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-200/80 dark:border-slate-800 text-xs shrink-0 self-end xs:self-auto">
           <button
             onClick={() => setActiveTab('daily')}
             className={`px-2.5 py-1 rounded-md transition-all ${

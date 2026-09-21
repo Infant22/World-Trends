@@ -103,8 +103,8 @@ export const CurrencyWidget: React.FC<CurrencyWidgetProps> = ({ data, isLoading 
         </div>
 
         {/* Amount & Selectors Row */}
-        <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2 mb-3">
-          <div>
+        <div className="flex flex-wrap sm:grid sm:grid-cols-[1fr_auto] items-end gap-2 mb-3">
+          <div className="flex-1 min-w-[100px]">
             <label className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 mb-1 block uppercase tracking-wider">Amount</label>
             <input
               type="number"
@@ -115,7 +115,7 @@ export const CurrencyWidget: React.FC<CurrencyWidgetProps> = ({ data, isLoading 
             />
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 shrink-0">
             <select
               value={fromCurr}
               onChange={(e) => setFromCurr(e.target.value)}
@@ -130,7 +130,7 @@ export const CurrencyWidget: React.FC<CurrencyWidgetProps> = ({ data, isLoading 
 
             <button
               onClick={swapCurrencies}
-              className="h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all hover:scale-105"
+              className="h-8 w-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all hover:scale-105 shrink-0"
               title="Swap currencies"
             >
               <ArrowLeftRight className="h-3.5 w-3.5" />
