@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSettings, onOpenExplore })
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-3 sm:px-4 md:px-6 lg:px-8 py-2.5 mb-5 transition-colors duration-200">
+    <header className="relative md:sticky md:top-0 z-40 w-full bg-white/95 dark:bg-slate-950/95 md:bg-white/80 md:dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 px-3 sm:px-4 md:px-6 lg:px-8 py-2.5 mb-4 sm:mb-5 transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 md:gap-4">
         {/* Brand & Location Greeting */}
         <div className="flex items-center justify-between w-full md:w-auto gap-3 shrink-0">

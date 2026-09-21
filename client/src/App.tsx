@@ -187,7 +187,7 @@ const DashboardContent: React.FC = () => {
               switch (key) {
                 case 'weather':
                   return (
-                    <section key="weather" className="space-y-3 order-1 w-full min-w-0">
+                    <section key="weather" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Activity className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
@@ -204,7 +204,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'currency':
                   return (
-                    <section key="currency" className="space-y-3 order-2 w-full min-w-0">
+                    <section key="currency" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -221,7 +221,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'worldClock':
                   return (
-                    <section key="worldClock" className="space-y-3 order-3 w-full min-w-0">
+                    <section key="worldClock" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
@@ -235,7 +235,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'news':
                   return (
-                    <section key="news" className="space-y-3 order-4 w-full min-w-0">
+                    <section key="news" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Newspaper className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
@@ -253,7 +253,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'trending':
                   return (
-                    <section key="trending" className="space-y-3 order-5 w-full min-w-0">
+                    <section key="trending" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Sparkles className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400 shrink-0" />
@@ -267,7 +267,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'sports':
                   return (
-                    <section key="sports" className="space-y-3 order-6 w-full min-w-0">
+                    <section key="sports" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Trophy className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
@@ -284,7 +284,7 @@ const DashboardContent: React.FC = () => {
 
                 case 'explore':
                   return (
-                    <section key="explore" className="space-y-3 order-7 w-full min-w-0">
+                    <section key="explore" className="space-y-3 w-full min-w-0">
                       <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
                         <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
                           <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
@@ -322,17 +322,29 @@ const DashboardContent: React.FC = () => {
               );
             }
 
+            // Mobile-specific explicit widget order sequence (< lg)
+            const MOBILE_ORDER: WidgetKey[] = ['weather', 'currency', 'worldClock', 'news', 'trending', 'sports', 'explore'];
+            const activeMobileKeys = MOBILE_ORDER.filter((key) => !!preferences.visibleWidgets[key]);
+
             return (
-              <div className="flex flex-col space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0 items-start w-full min-w-0">
-                <div className="contents lg:block lg:col-span-2 lg:space-y-6">
-                  {renderColumnWidgets(layout.leftWidgets)}
+              <>
+                {/* Mobile Viewport Layout (< lg): Clean vertical DOM sequence */}
+                <div className="space-y-6 lg:hidden w-full min-w-0">
+                  {activeMobileKeys.map((key) => renderWidgetByKey(key))}
                 </div>
-                {layout.rightWidgets.length > 0 && (
-                  <div className="contents lg:block lg:col-span-1 lg:space-y-6">
-                    {renderColumnWidgets(layout.rightWidgets)}
+
+                {/* Desktop Viewport Layout (>= lg): Approved 2-column grid layout */}
+                <div className="hidden lg:grid lg:grid-cols-3 lg:gap-6 lg:items-start w-full min-w-0">
+                  <div className="lg:col-span-2 space-y-6">
+                    {renderColumnWidgets(layout.leftWidgets)}
                   </div>
-                )}
-              </div>
+                  {layout.rightWidgets.length > 0 && (
+                    <div className="lg:col-span-1 space-y-6">
+                      {renderColumnWidgets(layout.rightWidgets)}
+                    </div>
+                  )}
+                </div>
+              </>
             );
           })()}
         </main>
