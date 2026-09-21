@@ -103,8 +103,8 @@ export const CurrencyWidget: React.FC<CurrencyWidgetProps> = ({ data, isLoading 
         </div>
 
         {/* Amount & Selectors Row */}
-        <div className="flex flex-wrap sm:grid sm:grid-cols-[1fr_auto] items-end gap-2 mb-3">
-          <div className="flex-1 min-w-[100px]">
+        <div className="flex flex-wrap xs:grid xs:grid-cols-[1fr_auto] items-end gap-2 mb-3 w-full min-w-0">
+          <div className="flex-1 min-w-0 w-full xs:w-auto">
             <label className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 mb-1 block uppercase tracking-wider">Amount</label>
             <input
               type="number"

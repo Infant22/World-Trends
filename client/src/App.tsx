@@ -143,9 +143,9 @@ const DashboardContent: React.FC = () => {
         />
 
         {/* Main Information Dashboard Container */}
-        <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 space-y-6 sm:space-y-8">
+        <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-2 space-y-6 sm:space-y-8 w-full min-w-0">
           {/* Personalization System Status Bar */}
-          <div className="py-2.5 px-3 sm:px-4 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 shadow-xs">
+          <div className="py-2.5 px-3 sm:px-4 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 shadow-xs w-full min-w-0">
             <div className="flex items-start sm:items-center gap-2.5 min-w-0">
               <div className="p-1 rounded-md bg-sky-50 dark:bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-200/60 dark:border-sky-500/20 shrink-0 mt-0.5 sm:mt-0">
                 <Sparkles className="h-3.5 w-3.5" />
@@ -153,7 +153,7 @@ const DashboardContent: React.FC = () => {
               <div className="text-xs min-w-0 leading-normal">
                 <span className="font-semibold text-slate-900 dark:text-slate-100">Guest Personalization Active</span>
                 <span className="text-slate-300 dark:text-slate-700 mx-1.5 sm:mx-2">•</span>
-                <span className="text-slate-600 dark:text-slate-400">
+                <span className="text-slate-600 dark:text-slate-400 break-words">
                   Showing trends for <strong className="text-sky-700 dark:text-sky-300 font-semibold">{preferences.homeCity}</strong> ({preferences.targetCurrency})
                   {preferences.selectedInterests && preferences.selectedInterests.length > 0 && (
                     <span> • Prioritizing <strong className="text-sky-700 dark:text-sky-300 font-semibold">{preferences.selectedInterests.join(', ')}</strong></span>
@@ -164,7 +164,7 @@ const DashboardContent: React.FC = () => {
 
             <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/60 shrink-0 gap-2.5">
               {lastRefreshedAt && (
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">
                   {formatLastUpdated(lastRefreshedAt, now)}
                 </span>
               )}
@@ -187,13 +187,13 @@ const DashboardContent: React.FC = () => {
               switch (key) {
                 case 'weather':
                   return (
-                    <section key="weather" className="space-y-3 order-1">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Activity className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
-                          <span>Now in {preferences.homeCity}</span>
+                    <section key="weather" className="space-y-3 order-1 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Activity className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                          <span className="truncate">Now in {preferences.homeCity}</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">LIVE OVERVIEW</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">LIVE OVERVIEW</span>
                       </div>
                       <WeatherWidget
                         data={weatherQuery.data || ({} as any)}
@@ -204,13 +204,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'currency':
                   return (
-                    <section key="currency" className="space-y-3 order-2">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                          <span>Live Utilities</span>
+                    <section key="currency" className="space-y-3 order-2 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span className="truncate">Live Utilities</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">CURRENCY CONVERTER</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">CURRENCY CONVERTER</span>
                       </div>
                       <CurrencyWidget
                         data={currencyQuery.data || ({} as any)}
@@ -221,13 +221,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'worldClock':
                   return (
-                    <section key="worldClock" className="space-y-3 order-3">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                          <span>Live Utilities</span>
+                    <section key="worldClock" className="space-y-3 order-3 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Globe2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span className="truncate">Live Utilities</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">WORLD CLOCK</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">WORLD CLOCK</span>
                       </div>
                       <WorldClockWidget />
                     </section>
@@ -235,13 +235,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'news':
                   return (
-                    <section key="news" className="space-y-3 order-4">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Newspaper className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400" />
-                          <span>Headlines & Global News</span>
+                    <section key="news" className="space-y-3 order-4 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Newspaper className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                          <span className="truncate">Headlines & Global News</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">EDITORIAL STREAM</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">EDITORIAL STREAM</span>
                       </div>
                       <NewsWidget
                         articles={newsQuery.data || []}
@@ -253,13 +253,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'trending':
                   return (
-                    <section key="trending" className="space-y-3 order-5">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Sparkles className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400" />
-                          <span>Trending Topics</span>
+                    <section key="trending" className="space-y-3 order-5 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Sparkles className="h-3.5 w-3.5 text-orange-600 dark:text-orange-400 shrink-0" />
+                          <span className="truncate">Trending Topics</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">REAL-TIME</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">REAL-TIME</span>
                       </div>
                       <TrendingWidget />
                     </section>
@@ -267,13 +267,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'sports':
                   return (
-                    <section key="sports" className="space-y-3 order-6">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Trophy className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400" />
-                          <span>Sports & Discovery</span>
+                    <section key="sports" className="space-y-3 order-6 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Trophy className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
+                          <span className="truncate">Sports & Discovery</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">LIVE ACTION</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">LIVE ACTION</span>
                       </div>
                       <SportsWidget
                         matches={sportsQuery.data || []}
@@ -284,13 +284,13 @@ const DashboardContent: React.FC = () => {
 
                 case 'explore':
                   return (
-                    <section key="explore" className="space-y-3 order-7">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60">
-                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                          <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
-                          <span>Featured Discovery</span>
+                    <section key="explore" className="space-y-3 order-7 w-full min-w-0">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-800/60 gap-2 min-w-0">
+                        <div className="flex items-center gap-2 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 min-w-0">
+                          <Sparkles className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                          <span className="truncate">Featured Discovery</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono">ON THIS DAY</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-400 font-mono shrink-0">ON THIS DAY</span>
                       </div>
                       <InterestingTodayWidget />
                     </section>
@@ -323,7 +323,7 @@ const DashboardContent: React.FC = () => {
             }
 
             return (
-              <div className="flex flex-col space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0 items-start">
+              <div className="flex flex-col space-y-6 lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0 items-start w-full min-w-0">
                 <div className="contents lg:block lg:col-span-2 lg:space-y-6">
                   {renderColumnWidgets(layout.leftWidgets)}
                 </div>

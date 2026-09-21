@@ -120,17 +120,19 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ data, isLoading })
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-5 gap-1.5">
-              {data.forecast.map((h, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-center p-2 rounded-lg bg-slate-50/60 dark:bg-slate-900/40 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 text-center transition-colors"
-                >
-                  <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">{h.time}</span>
-                  <span className="text-xs font-bold text-slate-900 dark:text-white my-1">{Math.round(h.temp)}°</span>
-                  <span className="text-[9px] text-sky-600 dark:text-sky-400 font-semibold">{h.pop}%</span>
-                </div>
-              ))}
+            <div className="overflow-x-auto scrollbar-none w-full">
+              <div className="grid grid-cols-5 gap-1 sm:gap-1.5 min-w-[260px]">
+                {data.forecast.map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col items-center p-1.5 sm:p-2 rounded-lg bg-slate-50/60 dark:bg-slate-900/40 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 text-center transition-colors min-w-0"
+                  >
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate w-full">{h.time}</span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white my-1">{Math.round(h.temp)}°</span>
+                    <span className="text-[9px] text-sky-600 dark:text-sky-400 font-semibold">{h.pop}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
